@@ -4,43 +4,50 @@ isort = isort --profile black pcb
 
 .PHONY: depends
 depends:
-	bash ./bin/depends.sh
+	@echo "Installing OS dependencies..."
+	@bash ./bin/depends.sh
+	@echo "Done"
 
 .PHONY: init
 init: depends
-	echo "Setting up virtual environment in venv/"
-	python3 -m venv venv
-	echo "Virtual environment complete."
-	echo
-	echo "Now run:"
-	echo "$ source venv/bin/activate"
+	@echo "Setting up virtual environment in venv/"
+	@python3 -m venv venv
+	@echo "Virtual environment complete."
 
 .PHONY: format
 format:
-	$(isort)
-	$(black)
+	. venv/bin/activate && ( \
+	$(isort)  && \
+	$(black) \
+	)
 
 .PHONY: lint
 lint:
-	mypy --show-error-codes pcb
-	flake8 --ignore=E203,F841,E501,E722,W503  pcb
-	$(isort) --check-only --df
-	$(black) --check --diff
+	. venv/bin/activate && ( \
+	mypy --show-error-codes pcb ; \
+	flake8 --ignore=E203,F841,E501,E722,W503 pcb ; \
+	$(isort) --check-only --df ; \
+	$(black) --check --diff  \
+	)
 
 .PHONY: install
 install: depends init
-	pip install -r requirements.txt
-	python setup.py install
-	python setup.py clean
+	. venv/bin/activate && ( \
+	pip install -r requirements.txt ; \
+	python setup.py install ; \
+	python setup.py clean \
+	)
 
 .PHONY: update
 update: format lint
-	pip freeze | grep -v pcb > requirements.txt
-	git add setup.py docs bin pcb requirements.txt Makefile
-	git commit --allow-empty -m "Updates"
-	git push origin main
-	python setup.py install
-	git status
+	. venv/bin/activate && ( \
+	pip freeze | grep -v pcb > requirements.txt ; \
+	git add setup.py docs bin pcb requirements.txt Makefile ; \
+	git commit --allow-empty -m "Updates" ; \
+	git push origin main ; \
+	python setup.py install ; \
+	git status \
+	)
 
 .PHONY: docs
 docs:
