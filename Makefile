@@ -42,7 +42,7 @@ install: depends init
 update: format lint
 	. venv/bin/activate && ( \
 	pip freeze | grep -v pcb > requirements.txt ; \
-	git add setup.py docs bin pcb requirements.txt Makefile ; \
+	git add .gitignore setup.py docs bin pcb requirements.txt Makefile ; \
 	git commit --allow-empty -m "Updates" ; \
 	git push origin main ; \
 	python setup.py install ; \
