@@ -1,6 +1,6 @@
 build
 git
-docs/_build
+docs/build
 dist
 *egg-info
 /**/*.pyc
