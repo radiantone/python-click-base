@@ -33,5 +33,6 @@ def cli(context, debug):
             level=logging.INFO,
         )
 
+    logging.debug("Debug ON")
     if len(sys.argv) == 1:
         click.echo(context.get_help())
