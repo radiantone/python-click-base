@@ -61,8 +61,10 @@ clean:
 
 .PHONY: test
 test: format lint
-	python setup.py install
-	pytest
+	. venv/bin/activate && ( \
+	python3 setup.py install ; \
+	pytest \
+	)
 	
 .PHONY: all
 all: format lint update docs install test clean
