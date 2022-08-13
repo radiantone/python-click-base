@@ -56,8 +56,10 @@ docs:
 
 .PHONY: clean
 clean:
-	python setup.py clean
-	git status
+	. venv/bin/activate && ( \
+	python setup.py clean ; \
+	git status \
+	)
 
 .PHONY: test
 test: format lint
